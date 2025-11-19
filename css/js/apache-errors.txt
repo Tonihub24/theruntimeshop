@@ -1,0 +1,20 @@
+[Tue Sep 02 17:42:01.395433 2025] [mpm_prefork:notice] [pid 2004684:tid 2004684] AH00171: Graceful restart requested, doing restart
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+[Tue Sep 02 17:42:01.539807 2025] [mpm_prefork:notice] [pid 2004684:tid 2004684] AH00163: Apache/2.4.62 (Debian) OpenSSL/3.0.16 configured -- resuming normal operations
+[Tue Sep 02 17:42:01.540495 2025] [core:notice] [pid 2004684:tid 2004684] AH00094: Command line: '/usr/sbin/apache2'
+[Tue Sep 02 17:42:09.006441 2025] [mpm_prefork:notice] [pid 2004684:tid 2004684] AH00171: Graceful restart requested, doing restart
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+[Tue Sep 02 17:42:09.117584 2025] [mpm_prefork:notice] [pid 2004684:tid 2004684] AH00163: Apache/2.4.62 (Debian) OpenSSL/3.0.16 configured -- resuming normal operations
+[Tue Sep 02 17:42:09.118122 2025] [core:notice] [pid 2004684:tid 2004684] AH00094: Command line: '/usr/sbin/apache2'
+[Tue Sep 02 17:42:10.602471 2025] [mpm_prefork:notice] [pid 2004684:tid 2004684] AH00171: Graceful restart requested, doing restart
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+[Tue Sep 02 17:42:10.699400 2025] [mpm_prefork:notice] [pid 2004684:tid 2004684] AH00163: Apache/2.4.62 (Debian) OpenSSL/3.0.16 configured -- resuming normal operations
+[Tue Sep 02 17:42:10.699441 2025] [core:notice] [pid 2004684:tid 2004684] AH00094: Command line: '/usr/sbin/apache2'
+[Wed Sep 03 12:29:32.469891 2025] [core:error] [pid 142632:tid 142632] [client 146.190.147.110:51488] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Wed Sep 03 12:29:33.116232 2025] [core:error] [pid 142633:tid 142633] [client 146.190.147.110:59292] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Wed Sep 03 14:33:47.390233 2025] [core:error] [pid 142633:tid 142633] [client 118.70.178.158:58100] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Wed Sep 03 14:33:54.939705 2025] [core:error] [pid 142648:tid 142648] [client 42.114.15.139:2345] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Fri Sep 05 20:20:45.105408 2025] [core:error] [pid 266772:tid 266772] [client 34.123.181.51:33838] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Fri Sep 05 20:20:45.184690 2025] [core:error] [pid 266766:tid 266766] [client 34.123.181.51:33848] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Sun Sep 07 01:26:25.342248 2025] [core:error] [pid 390378:tid 390378] [client 94.74.164.120:40852] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Sun Sep 07 01:26:25.518032 2025] [core:error] [pid 390374:tid 390374] [client 94.74.164.120:40856] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)

@@ -1,0 +1,128 @@
+<!-- BEGIN Unit Testing Collapsible Quiz -->
+<div style="max-width: 800px; margin: 50px auto; font-family: sans-serif; color: #fff; background: #111; padding: 20px; border-radius: 12px;">
+
+  <!-- Intro Paragraph -->
+  <p style="font-size: 1rem; line-height: 1.6; color: #ccc;">
+    We have written some code for the website's layout and design, which is what the user sees and interacts with. Now, we need to connect the front-end elements, like buttons and forms, to the backend. 
+    On the backend, we use <strong>SQL/MariaDB</strong> as our database for user logins. When a user clicks the login button, the browser sends this information to the backend. PHP uses the four main database variables: 
+    <code>$servername</code>, <code>$username</code>, <code>$password</code>, and <code>$database</code> to connect to MariaDB and check whether the user is authorized to access the site. 
+    This process ensures that only valid users can log in and access protected content.
+  </p>
+
+  <!-- Collapsible Questions -->
+  <div class="unit-test-quiz">
+
+    <button class="collapsible" style="width:100%; background:#222; color:#0ff; padding:12px; border:none; text-align:left; font-size:1rem; border-radius:6px; cursor:pointer; margin-top:10px;">
+      Q1: What will this PHP code output?
+    </button>
+    <div class="content" style="padding:10px 20px; background:#111; display:none; border-left:2px solid #0ff; border-radius:0 0 6px 6px;">
+      <pre style="background:#222; padding:10px; border-radius:6px;">
+&lt;?php
+function add($a, $b) {
+    return $a + $b;
+}
+echo add(2, 3);
+?&gt;
+      </pre>
+      <button class="quiz-btn" data-answer="5">5</button>
+      <button class="quiz-btn" data-answer="23">23</button>
+      <button class="quiz-btn" data-answer="Error">Error</button>
+      <p class="quiz-feedback" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+
+    <button class="collapsible" style="width:100%; background:#222; color:#0ff; padding:12px; border:none; text-align:left; font-size:1rem; border-radius:6px; cursor:pointer; margin-top:10px;">
+      Q2: If a PHP file connects to a database and shows this message, what does it mean?
+    </button>
+    <div class="content" style="padding:10px 20px; background:#111; display:none; border-left:2px solid #0ff; border-radius:0 0 6px 6px;">
+      <pre style="background:#222; padding:10px; border-radius:6px;">
+Connected successfully!
+      </pre>
+      <button class="quiz-btn" data-answer="Error connecting">Error connecting</button>
+      <button class="quiz-btn" data-answer="Connected successfully!">Connected successfully!</button>
+      <button class="quiz-btn" data-answer="Database empty">Database empty</button>
+      <p class="quiz-feedback" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+
+    <!-- Add more questions following the same pattern -->
+    <button class="collapsible" style="width:100%; background:#222; color:#0ff; padding:12px; border:none; text-align:left; font-size:1rem; border-radius:6px; cursor:pointer; margin-top:10px;">
+      Q3: What will this PHP function output?
+    </button>
+    <div class="content" style="padding:10px 20px; background:#111; display:none; border-left:2px solid #0ff; border-radius:0 0 6px 6px;">
+      <pre style="background:#222; padding:10px; border-radius:6px;">
+&lt;?php
+function multiply($x, $y) {
+    return $x * $y;
+}
+echo multiply(2, 4);
+?&gt;
+      </pre>
+      <button class="quiz-btn" data-answer="6">6</button>
+      <button class="quiz-btn" data-answer="8">8</button>
+      <button class="quiz-btn" data-answer="24">24</button>
+      <p class="quiz-feedback" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+
+    <button class="collapsible" style="width:100%; background:#222; color:#0ff; padding:12px; border:none; text-align:left; font-size:1rem; border-radius:6px; cursor:pointer; margin-top:10px;">
+      Q4: Can unit testing help prevent errors on the live website?
+    </button>
+    <div class="content" style="padding:10px 20px; background:#111; display:none; border-left:2px solid #0ff; border-radius:0 0 6px 6px;">
+      <button class="quiz-btn" data-answer="No">No</button>
+      <button class="quiz-btn" data-answer="Yes">Yes</button>
+      <p class="quiz-feedback" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+
+    <button class="collapsible" style="width:100%; background:#222; color:#0ff; padding:12px; border:none; text-align:left; font-size:1rem; border-radius:6px; cursor:pointer; margin-top:10px;">
+      Q5: Unit testing focuses on testing how many pieces of code at once?
+    </button>
+    <div class="content" style="padding:10px 20px; background:#111; display:none; border-left:2px solid #0ff; border-radius:0 0 6px 6px;">
+      <button class="quiz-btn" data-answer="One at a time">One at a time</button>
+      <button class="quiz-btn" data-answer="The whole program">The whole program</button>
+      <button class="quiz-btn" data-answer="Multiple modules">Multiple modules</button>
+      <p class="quiz-feedback" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+
+    <button class="collapsible" style="width:100%; background:#222; color:#0ff; padding:12px; border:none; text-align:left; font-size:1rem; border-radius:6px; cursor:pointer; margin-top:10px;">
+      Q6: Main PHP variables to connect to a MySQL database?
+    </button>
+    <div class="content" style="padding:10px 20px; background:#111; display:none; border-left:2px solid #0ff; border-radius:0 0 6px 6px;">
+      <button class="quiz-btn" data-answer="host, port, user, db">host, port, user, db</button>
+      <button class="quiz-btn" data-answer="servername, username, password, database">servername, username, password, database</button>
+      <button class="quiz-btn" data-answer="ip, login, secret, table">ip, login, secret, table</button>
+      <p class="quiz-feedback" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Collapsible functionality
+const collapsibles = document.querySelectorAll(".collapsible");
+collapsibles.forEach(btn => {
+    btn.addEventListener("click", function() {
+        this.classList.toggle("active");
+        const content = this.nextElementSibling;
+        if(content.style.display === "block"){
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
+        }
+    });
+});
+
+// Quiz feedback
+document.querySelectorAll('.unit-test-quiz .quiz-question, .unit-test-quiz .content').forEach(section => {
+    section.querySelectorAll('.quiz-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const feedback = btn.parentElement.querySelector('.quiz-feedback');
+            if(btn.dataset.answer === section.dataset.correct){
+                feedback.textContent = "✅ Correct! Great job!";
+                feedback.style.color = "lime";
+            } else {
+                feedback.textContent = "❌ Incorrect. Try again!";
+                feedback.style.color = "red";
+            }
+        });
+    });
+});
+</script>
+<!-- END Unit Testing Collapsible Quiz -->

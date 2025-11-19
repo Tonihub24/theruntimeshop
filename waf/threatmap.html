@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Runtime Threat Map</title>
+
+  <!-- ✅ Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha512-sA+eijw+vFlhZCdCErN57liBKPtxW9DNX2XB9TtmdzJ8OhM6yV5n3n12zPrjJMjVZ30KPK2Ce3kxG+4OPmnAZQ=="
+    crossorigin=""
+  />
+
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- ✅ Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha512-vMc3eGzwhw2S9qkzE0G2lKTrjFY6x7zQ3f9VYY4VL+2JkCTu9Xu+J6nVftQMHksO3lzbgH03Ko7APZV8yMWCNQ=="
+    crossorigin=""
+  ></script>
+
+  <script>
+    // Create the map
+    const map = L.map('map').setView([20, 0], 2);
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Runtime Threat Map',
+    }).addTo(map);
+
+    // Fetch threat data from backend
+    fetch('https://theruntimeshop.com/waf/logtest.php')
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(threat => {
+          const marker = L.marker([threat.lat, threat.lon])
+            .addTo(map)
+            .bindPopup(`
+              <b>IP:</b> ${threat.ip}<br>
+              <b>Country:</b> ${threat.country}<br>
+              <b>Time:</b> ${threat.timestamp}
+            `);
+        });
+      })
+      .catch(err => console.error('Error loading threat data:', err));
+  </script>
+</body>
+</html>

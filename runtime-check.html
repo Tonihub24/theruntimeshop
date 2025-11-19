@@ -1,0 +1,447 @@
+<?php
+session_start();
+$username = $_SESSION['username'] ?? 'Guest';
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Runtime Checklist</title>
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pap6zpY35G2zRRv+nBi4+i7rQbV7Gyf5f7EDMxIxz+Wlns/XxHg3JYV7w5QScnQ9d8z1DapYqQ8IqN8+K3U9kg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Internal Styles -->
+  <style>
+    body {
+      background: #111;
+      color: #0ff;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .checklist {
+      max-width: 600px;
+      margin: 1rem auto 3rem;
+    }
+
+    .item {
+      margin: 1rem 0;
+      cursor: default;
+    }
+
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      border: 2px solid #0ff;
+      border-radius: 8px;
+      background: #000;
+    }
+
+    .btn {
+      background: #0ff;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 1rem 1rem 2rem 0;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover,
+    .btn:focus {
+      background-color: #33ffffcc;
+      outline: none;
+    }
+
+    /* Deployment Map Section */
+    .deployment-map {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .map-card {
+      background: #111;
+      border: 1px solid #0ff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      width: 320px;
+      box-shadow: 0 0 15px #0ff2;
+      position: relative;
+      color: #0ff;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      outline-offset: 4px;
+    }
+
+    .map-card:focus-within,
+    .map-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px #31aff8cc;
+    }
+
+    .map-card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .map-icon {
+      margin-right: 0.5rem;
+    }
+
+    .hover-accessibility {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #31aff8;
+      background: #000c;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .map-card ul {
+      padding-left: 1rem;
+    }
+
+    .toggle-details-btn {
+      margin-top: 0.5rem;
+      background: transparent;
+      border: 1px solid #0ff;
+      color: #0ff;
+      padding: 0.35rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.25s ease;
+    }
+
+    .toggle-details-btn:hover,
+    .toggle-details-btn:focus {
+      background-color: #0ff2;
+      outline: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 400px) {
+      .deployment-map {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .map-card {
+        width: 90%;
+        max-width: 400px;
+      }
+    }
+
+    /* Input and buttons for Security Scanner */
+    #domainInput {
+      padding: 0.5rem;
+      width: 70%;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: none;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    #result {
+      margin-top: 1.5rem;
+      color: #0ff;
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🛠 Runtime Readiness Checklist</h1>
+  <p style="text-align:center;">
+    Hello, <strong><?php echo htmlspecialchars($username); ?></strong>. Check off what you've completed:
+  </p>
+
+  <!-- Runtime Checklist Form -->
+  <div class="checklist">
+    <form id="runtimeForm">
+      <div class="item" title="Connects your domain name to your web server via DNS records.">
+        <input type="checkbox" name="item" value="1" /> ✅ Domain name registered and DNS configured
+      </div>
+      <div class="item" title="Ensures secure HTTPS connection between browser and server.">
+        <input type="checkbox" name="item" value="1" /> ✅ SSL/TLS certificate installed (e.g., ZeroSSL, Let's Encrypt)
+      </div>
+      <div class="item" title="Uploaded code through VS Code or Git for version control.">
+        <input type="checkbox" name="item" value="1" /> ✅ Website deployed using VS Code or Git
+      </div>
+      <div class="item" title="Prevents XSS and SQL injection by cleaning form inputs.">
+        <input type="checkbox" name="item" value="1" /> ✅ HTML/PHP forms sanitized and validated
+      </div>
+      <div class="item" title="Protects server from brute-force attacks and restricts open ports.">
+        <input type="checkbox" name="item" value="1" /> ✅ Fail2Ban, UFW or similar protections in place
+      </div>
+      <div class="item" title="Secures session cookies using flags like HttpOnly, Secure, SameSite.">
+        <input type="checkbox" name="item" value="1" /> ✅ Sessions protected using secure cookie flags
+      </div>
+      <div class="item" title="Ensures disaster recovery by backing up databases.">
+        <input type="checkbox" name="item" value="1" /> ✅ Database backups (mysqldump or automated)
+      </div>
+      <div class="item" title="Confirms site passes speed, SEO, and security header audits.">
+        <input type="checkbox" name="item" value="1" /> ✅ Site passes Lighthouse + SecurityHeader scans
+      </div>
+
+      <hr />
+
+      <h3 style="color:#0ff;">🚀 Advanced Production Checklist</h3>
+
+      <div class="item" title="Blocks clickjacking and forces HTTPS using Apache/Nginx headers.">
+        🔐 Apache/Nginx security headers set (`X-Frame-Options`, `HSTS`, `Permissions-Policy`)
+      </div>
+      <div class="item" title="Ensures sensitive files like .env and .git are not accessible on live server.">
+        🧱 `.env` / `.git` / `config.php` protected from public access
+      </div>
+      <div class="item" title="Shows friendly error pages to users, logs real errors privately.">
+        🔧 Production error logging enabled, error display turned off
+      </div>
+      <div class="item" title="Prevents abuse by limiting DB permissions. Avoid root or GRANT ALL.">
+        🔑 Database user limited (no `GRANT ALL`, root login disabled)
+      </div>
+      <div class="item" title="Helps users stay informed when pages are missing or broken.">
+        📁 Custom 404, 403, 500 error pages configured
+      </div>
+      <div class="item" title="Checks for missing pages and JavaScript errors across devices.">
+        🧪 Broken links + console errors tested on desktop and mobile
+      </div>
+      <div class="item" title="Speeds up site by caching assets and serving them from edge servers.">
+        📦 CDN (e.g. Cloudflare) and asset caching enabled
+      </div>
+      <div class="item" title="Validates authentication logic under various user flows.">
+        🔄 Forms tested: login, logout, session timeout
+      </div>
+      <div class="item" title="Removes sensitive Git history and files from production.">
+        🧬 Version control hygiene: `.git` not deployed
+      </div>
+    </form>
+  </div>
+
+  <!-- Deployment Map -->
+  <section class="deployment-map" aria-label="RuntimeShop Deployment Readiness Map">
+
+    <!-- Stage 1: Pre-Runtime Deployment -->
+    <article
+      class="map-card"
+      id="pre-runtime-map"
+      tabindex="0"
+      aria-labelledby="pre-runtime-title"
+      role="region"
+    >
+      <h2 id="pre-runtime-title">
+        <i class="fas fa-rocket-launch map-icon" aria-hidden="true"></i> Pre-Runtime Deployment
+      </h2>
+      <ul>
+        <li>✅ Domain Name Registered & DNS Set</li>
+        <li>✅ SSL/TLS Certificate Installed (ZeroSSL, Let's Encrypt)</li>
+        <li>✅ Site Deployed with VS Code / Git Push</li>
+        <li>✅ HTML/PHP Forms Sanitized</li>
+        <li>✅ Version Control Hygiene (.gitignore, no config.php)</li>
+        <li>✅ .env Protected & GitHub Secrets Setup</li>
+        <li>✅ Lighthouse & SecurityHeader Audit Pass</li>
+      </ul>
+      <button
+        aria-expanded="false"
+        aria-controls="pre-runtime-details"
+        class="toggle-details-btn"
+      >
+        More info
+      </button>
+      <div class="hover-accessibility" id="pre-runtime-details" hidden>
+        <strong>Pre-Runtime</strong>: Setup before going live:
+        <ul>
+          <li>✔ GitHub Repo or VS Code FTP push</li>
+          <li>✔ .env secured + no exposed credentials</li>
+          <li>✔ Pass Lighthouse, WCAG, & Security Headers</li>
+          <li>✔ Validate HTML/PHP + protect sessions</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Stage 2: Production Runtime Deployment -->
+    <article
+      class="map-card"
+      id="production-runtime-map"
+      tabindex="0"
+      aria-labelledby="production-runtime-title"
+      role="region"
+    >
+      <h2 id="production-runtime-title">
+        <i class="fas fa-server map-icon" aria-hidden="true"></i> Production Runtime Deployment
+      </h2>
+      <ul>
+        <li>🔐 Apache/Nginx Headers Set (HSTS, Permissions-Policy)</li>
+        <li>🛡 Fail2Ban / UFW Enabled</li>
+        <li>🧱 Firewall Rules + Root Login Disabled</li>
+        <li>📁 Custom 404, 403, 500 Error Pages</li>
+        <li>🔧 Error Logging + Log Rotation</li>
+        <li>🧬 mysqldump / cron job backups enabled</li>
+        <li>📦 CDN + Asset Optimization</li>
+      </ul>
+      <button
+        aria-expanded="false"
+        aria-controls="production-runtime-details"
+        class="toggle-details-btn"
+      >
+        More info
+      </button>
+      <div class="hover-accessibility" id="production-runtime-details" hidden>
+        <strong>Production Runtime</strong>: Secure & Monitor:
+        <ul>
+          <li>✔ Security headers (X-Frame, HSTS)</li>
+          <li>✔ Fail2Ban, UFW or Cloudflare WAF</li>
+          <li>✔ PHP error logging + .tar.gz backups</li>
+          <li>✔ Git not deployed in production</li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <!-- Runtime Security Scanner -->
+  <div
+    style="
+      padding: 1.5rem;
+      background-color: #111;
+      color: #0ff;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: 3rem auto 4rem;
+    "
+  >
+    <h2>🌐 Runtime Security Scanner</h2>
+    <input
+      type="text"
+      id="domainInput"
+      placeholder="Enter domain (e.g. theruntimeshop.com)"
+      aria-label="Domain input"
+    />
+
+    <br /><br />
+
+    <button onclick="scanSecurityHeaders()" class="btn" type="button">
+      🔍 Check Security Headers
+    </button>
+    <button onclick="checkSSLLabs()" class="btn" type="button">
+      🔐 Run SSL Labs Scan
+    </button>
+
+    <div id="result"></div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div style="max-width: 600px; margin: 0 auto 4rem;">
+    <button
+      type="button"
+      onclick="runPrecautionaryInspection()"
+      class="btn"
+      style="margin-left: 0;"
+    >
+      Inspect My Runtime Environment
+    </button>
+  </div>
+
+  <!-- Scripts -->
+<script>
+  async function scanSecurityHeaders() {
+    const domain = document.getElementById('domainInput').value.trim();
+    if (!domain) return alert('Please enter a valid domain name.');
+
+    const targetUrl = `https://securityheaders.com/?q=${domain}&followRedirects=on&hide=on&json`;
+    const proxyUrl = `/proxy.php?target=${encodeURIComponent(targetUrl)}`;
+
+    try {
+      const response = await fetch(proxyUrl);
+      const data = await response.json();
+
+      if (data.error) {
+        document.getElementById('result').innerHTML = `<p style="color:orange;"⚠️ ${data.error}</p>`;
+
+        return;
+      }
+
+      let html = '<h3>🛡️ Security Headers Report</h3><ul>';
+      html += `<li><strong>Grade:</strong> ${data.grade || 'N/A'}</li>`;
+      if (data.headers) {
+        Object.entries(data.headers).forEach(([key, value]) => {
+          html += `<li><strong>${key}:</strong> ${value}</li>`;
+        });
+      }
+      html += '</ul>';
+      document.getElementById('result').innerHTML = html;
+    } catch (err) {
+      document.getElementById('result').innerHTML = "<p style='color: orange;'>⚠️ Could not fetch Security Headers scan.</p>";
+      console.error(err);
+    }
+  }
+
+  async function checkSSLLabs() {
+    const domain = document.getElementById('domainInput').value.trim();
+    if (!domain) return alert('Please enter a valid domain name.');
+
+    const targetUrl = `https://api.ssllabs.com/api/v3/analyze?host=${domain}`;
+    const proxyUrl = `/proxy.php?target=${encodeURIComponent(targetUrl)}`;
+
+    document.getElementById('result').innerHTML = '<p>⏳ Running SSL Labs scan... please wait ~1 minute.</p>';
+
+    try {
+      const pollSSL = async () => {
+        const res = await fetch(proxyUrl);
+        const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+
+        if (data.status === 'READY') return data;
+        if (data.status === 'ERROR') throw new Error('SSL Labs returned an error.');
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return await pollSSL();
+      };
+
+      const result = await pollSSL();
+      const endpoint = result.endpoints[0];
+
+      let html = '<h3>🔐 SSL Labs Report</h3><ul>';
+      html += `<li><strong>Grade:</strong> ${endpoint.grade || 'N/A'}</li>`;
+      html += `<li><strong>IP:</strong> ${endpoint.ipAddress}</li>`;
+      html += `<li><strong>Host:</strong> ${result.host}</li>`;
+      html += `<li><strong>Supports TLS 1.3:</strong> ${endpoint.details.tlsVersion === 'TLS 1.3' ? 'Yes' : 'No'}</li>`;
+      html += '</ul>';
+
+      document.getElementById('result').innerHTML = html;
+    } catch (error) {
+      document.getElementById('result').innerHTML = `<p style='color: red;'>❌ SSL scan failed: ${error.message}</p>`;
+      console.error(error);
+    }
+  }
+</script>
+
+
+ 
+</body>
+
+</html>
+

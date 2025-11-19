@@ -1,0 +1,476 @@
+/* 🌌 Base Layout */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  font-family: monospace;
+}
+
+.site-logo {
+  width: 420px;
+  margin-bottom: 20px;
+}
+
+/* 💠 Bubble Buttons */
+.bubble-buttons {
+  display: flex;
+  flex-direction: row; /* horizontal */
+  justify-content: center; /* center horizontally */
+  align-items: center; /* center vertically */
+  gap: 40px; /* space between bubbles */
+  margin-bottom: 30px;
+}
+
+.bubble {
+  width: 100px;
+  height: 2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #31aff8, #5a88d7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 25px #31aff8;
+  transition: all 0.4s ease;
+}
+
+.bubble:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 40px #bc13fe;
+}
+
+/* 💬 Form Container */
+.bubble-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.form-container {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.6s ease;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
+backdrop-filter: blur(15px);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  box-shadow: 0 0 25px rgba(49, 175, 248, 0.5);
+  width: 320px;
+  padding: 30px;
+  text-align: center;
+}
+
+
+
+
+.form-container.active {
+  opacity: 1;
+  max-height: 500px;
+}
+#inspect-lessons {
+  text-align: center;
+  color: #31aff8;
+  margin: 60px auto;
+  padding: 40px 20px;
+  width: 80%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(49, 175, 248, 0.3);
+}
+
+/* 🧩 Bubble Form Fields */
+.bubble-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bubble-form h2 {
+  color: #31aff8;
+}
+
+.bubble-form input {
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.bubble-form input:focus {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px #31aff8;
+}
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+}
+/* --- Modal Background --- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  -webkit-backdrop-filter: blur(15px);
+backdrop-filter: blur(15px);
+
+}
+
+/* --- Modal Content Box --- */
+.modal-content {
+  position: relative;
+  background: #0d1117;
+  border: 2px solid #00ffff55;
+  border-radius: 12px;
+  width: 90%;
+  height: 80%;
+  max-width: 1200px;
+  overflow: hidden;
+  box-shadow: 0 0 25px #00ffffaa;
+  animation: fadeIn 0.5s ease;
+}
+
+/* --- Embedded Lesson --- */
+.modal-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* --- Close Button --- */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #00ffff;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+}
+.close:hover {
+  color: #00e0e0;
+}
+
+/* --- Fade In Animation --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --- Button Styling --- */
+.btn {
+  background: #00ffff;
+  color: #0d1117;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.btn:hover {
+  background: #00e0e0;
+  transform: translateY(-3px);
+}
+
+#inspect-lessons .btn {
+  position: relative;
+  z-index: 20; /* ensures it's on top */
+}
+
+
+#inspect-lessons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* centers vertically */
+  align-items: center;       /* centers horizontally */
+  min-height: 10vh;         /* takes full screen height */
+  text-align: center;        /* centers text inside */
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  color: #31aff8;
+  font-family: monospace;
+  padding: 20px;
+}
+
+#inspect-lessons h2 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #00d9ff;
+}
+
+#inspect-lessons p {
+  font-size: 1.2em;
+  max-width: 700px;
+  margin-bottom: 15px;
+}
+
+#inspect-lessons ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+#inspect-lessons li {
+  margin: 8px 0;
+}
+
+#inspect-lessons .btn {
+  background: #00d9ff;
+  color: #0f0f0f;
+  padding: 12px 25px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+#inspect-lessons .btn:hover {
+  background: #008cb3;
+}
+
+
+.bubble-form button {
+  background: linear-gradient(90deg, #3149f8, #5a88d7);
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bubble-form button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #bc13fe;
+}
+html,
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: black;
+}
+
+.area {
+    width: 200px;
+    height: 500px;
+    animation: swing 1s infinite ease-in-out alternate;
+    transform-origin: top;
+    -moz-transform-origin: top;
+    -webkit-transform-origin: top;
+}
+
+.wire {
+    position: relative;
+    left: 98px;
+    height: 200px;
+    width: 4px;
+    background-color: black;
+}
+
+.fixture {
+    position: relative;
+    background-color: grey;
+    width: 16px;
+    height: 20px;
+    left: 92px;
+}
+
+.strip {
+    position: relative;
+    width: 18px;
+    height: 2px;
+    right: 1px;
+    top: 4px;
+    background-color: darkgrey;
+}
+
+.strip:nth-of-type(2) {
+    top: 7px;
+}
+
+.strip:nth-of-type(3) {
+    top: 10px;
+}
+
+.bulb {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    left: 80px;
+    bottom: 2px;
+    z-index: -1;
+    background-color: rgba(4 173 158);
+    border-radius: 80%;
+    -webkit-box-shadow: 0px 0px 300px 77px rgba(235, 209, 164, 1);
+    -moz-box-shadow: 0px 0px 300px 77px rgba(235, 209, 164, 1);
+    box-shadow: 0px 0px 300px 77px rgba(235, 209, 164, 1);
+}
+
+.zig {
+    position: relative;
+    background-color: transparent;
+    width: 10px;
+    height: 5px;
+    border-radius: 5px / 2.5px;
+    left: 14px;
+    border: black solid 1px;
+}
+
+.zig:nth-of-type(2) {
+    top: -3px;
+}
+
+.zig:nth-of-type(3) {
+    top: -6px;
+}
+.light-bulb-wrapper {
+  position: absolute;
+  top: 0;
+  left: 86%;
+  transform: translateX(-50%);
+  z-index: 2; /* ensures it stays visible above background */
+pointer-events: none; /* also prevents it from blocking clicks */
+}
+
+
+@keyframes swing {
+    from {
+        -moz-transform: rotate(3deg);
+        -webkit-transform: rotate(3deg);
+        transform: rotate(3deg);
+    }
+    to {
+        transform: rotate(-3deg);
+    }
+}
+@media (min-width: 1024px) {
+  .form-container {
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 40px rgba(49, 175, 248, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+.fadeOut {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+
+
+
+/* 📱 Responsive */
+@media (max-width: 600px) {
+  .bubble-buttons {
+    flex-direction: row;
+    gap: 20px;
+  }
+  .bubble-container {
+    flex-direction: column;
+  }
+  .form-container {
+    width: 90%;
+  }
+/* Base layout for desktops */
+.flow-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+  flex-direction: row;
+  overflow-x: auto; /* enables horizontal scroll on small devices */
+  scrollbar-width: none; /* hide scrollbar for cleaner look */
+}
+
+.flow-container::-webkit-scrollbar {
+  display: none;
+}
+
+.flow-node {
+  background: #0d1117;
+  border: 2px solid #00ffff55;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  color: #00e0e0;
+  font-weight: bold;
+  min-width: 80px;
+  transition: 0.3s;
+}
+
+.flow-node:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #00ffffaa;
+}
+
+.arrow {
+  font-size: 1.5em;
+  color: #00ffff;
+}
+
+/* 📱 Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .flow-container {
+    flex-direction: column;  /* stack vertically */
+    gap: 10px;
+  }
+
+  .flow-node {
+    min-width: auto;
+    width: 80%;
+    font-size: 1em;
+    padding: 10px;
+  }
+
+  .arrow {
+    transform: rotate(90deg); /* make arrows point downward */
+    font-size: 1.2em;
+  }
+
+  #stage1Section h1 {
+    font-size: 1.4em;
+    text-align: center;
+  }
+
+  #stage1Section p.subtitle {
+    font-size: 1em;
+    text-align: center;
+    padding: 0 10px;
+  }
+}
+
+
+

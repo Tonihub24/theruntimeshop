@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Runtime Readiness — Prototype</title>
+  <!-- Tailwind CDN - no build needed -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Small gauge style */
+    .gauge {
+      width: 140px;
+      height: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .gauge .arc {
+      width: 100%;
+      height: 200%;
+      border-radius: 50%;
+      transform-origin: 50% 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+    .dot { width:10px; height:10px; border-radius:50%; }
+    .pulse { animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0% { transform: scale(1);} 50% { transform: scale(1.08);} 100% { transform: scale(1);} }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 p-6">
+  <div class="max-w-7xl mx-auto">
+    <header class="mb-6">
+      <h1 class="text-2xl font-bold">Runtime Readiness — Mission Control</h1>
+      <p class="text-sm text-slate-600">Interactive prototype: check environment health, run readiness scans, and take quick actions.</p>
+    </header>
+
+    <!-- Top Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <!-- Left: Health Cards -->
+      <section class="col-span-2 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white rounded-xl p-4 shadow">
+            <h3 class="font-semibold">System Health</h3>
+            <p id="cpu" class="text-3xl font-mono mt-3">—%</p>
+            <p class="text-sm text-slate-500 mt-1">CPU Usage</p>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 shadow">
+            <h3 class="font-semibold">Memory</h3>
+            <p id="mem" class="text-3xl font-mono mt-3">—%</p>
+            <p class="text-sm text-slate-500 mt-1">RAM Usage</p>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 shadow">
+            <h3 class="font-semibold">Disk</h3>
+            <p id="disk" class="text-3xl font-mono mt-3">—%</p>
+            <p class="text-sm text-slate-500 mt-1">Disk Usage</p>
+          </div>
+        </div>
+
+        <!-- Runtime stack visual -->
+        <div class="bg-white rounded-xl p-4 shadow">
+          <h3 class="font-semibold mb-2">Runtime Stack Map</h3>
+          <div class="flex flex-col md:flex-row gap-3">
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border">
+              <h4 class="font-medium">Frontend</h4>
+              <p class="text-sm text-slate-500">React / Static assets</p>
+            </div>
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border">
+              <h4 class="font-medium">Backend</h4>
+              <p class="text-sm text-slate-500">Node / PHP / Apache</p>
+            </div>
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border">
+              <h4 class="font-medium">Database</h4>
+              <p class="text-sm text-slate-500">MySQL / Postgres</p>
+            </div>
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border">
+              <h4 class="font-medium">Security</h4>
+              <p class="text-sm text-slate-500">WAF, Fail2Ban, TLS</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scan & checklist -->
+        <div class="bg-white rounded-xl p-4 shadow flex flex-col md:flex-row gap-4 items-start">
+          <div class="flex-1">
+            <h3 class="font-semibold">Readiness Scan</h3>
+            <p class="text-sm text-slate-500">Run a pre-flight scan to check for common runtime issues.</p>
+            <div class="mt-3 flex gap-2">
+              <button id="runScan" class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700">Run Scan</button>
+              <button id="clearScan" class="px-4 py-2 bg-slate-100 rounded hover:bg-slate-200">Clear</button>
+              <button id="exportBtn" class="px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700">Export Report</button>
+            </div>
+          </div>
+
+          <div class="w-full md:w-96">
+            <h4 class="font-semibold">Pre-Flight Checklist</h4>
+            <ul id="checklist" class="mt-2 space-y-2 text-sm">
+              <li><label class="inline-flex items-center gap-2"><input type="checkbox" data-key="lint" /> Code passes lint</label></li>
+              <li><label class="inline-flex items-center gap-2"><input type="checkbox" data-key="deps" /> Dependencies up to date</label></li>
+              <li><label class="inline-flex items-center gap-2"><input type="checkbox" data-key="ssl" /> Valid SSL certificate</label></li>
+              <li><label class="inline-flex items-center gap-2"><input type="checkbox" data-key="db" /> Database connection</label></li>
+              <li><label class="inline-flex items-center gap-2"><input type="checkbox" data-key="waf" /> WAF active</label></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Score & quick actions -->
+      <aside class="space-y-4">
+        <div class="bg-white rounded-xl p-4 shadow flex items-center gap-4">
+          <div>
+            <div class="gauge" id="gaugeWrap" title="Readiness score">
+              <div class="arc" id="gaugeArc" style="background: linear-gradient(180deg,#10b981 0%,#f59e0b 50%,#ef4444 100%); transform: rotate(-90deg)"></div>
+            </div>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Readiness</div>
+            <div id="score" class="text-3xl font-bold tracking-tight">—</div>
+            <div id="scoreText" class="text-sm text-slate-500">—</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 shadow">
+          <h4 class="font-semibold">Quick Actions</h4>
+          <div class="mt-3 space-y-2">
+            <button id="restartHttp" class="w-full px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Restart Apache (simulate)</button>
+            <button id="restartDb" class="w-full px-3 py-2 bg-amber-600 text-white rounded hover:bg-amber-700">Restart DB (simulate)</button>
+            <button id="blockIp" class="w-full px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700">Block IP (simulate)</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 shadow">
+          <h4 class="font-semibold">Latest Alerts</h4>
+          <div id="alerts" class="mt-2 text-sm text-slate-600">
+            No alerts — run a scan or simulate activity.
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Incident timeline -->
+    <section class="mt-6 bg-white rounded-xl p-4 shadow">
+      <div class="flex justify-between items-start">
+        <h3 class="font-semibold">Incident Timeline</h3>
+        <div class="flex gap-2">
+          <input id="incidentText" class="border rounded px-2 py-1 text-sm" placeholder="Describe incident" />
+          <button id="addIncident" class="px-3 py-1 bg-indigo-600 text-white rounded">Add</button>
+        </div>
+      </div>
+      <ul id="timeline" class="mt-4 space-y-3 text-sm text-slate-700">
+        <!-- items appended here -->
+      </ul>
+    </section>
+
+    <footer class="mt-6 text-xs text-slate-500">
+      Prototype — simulated checks. Connect to backend/APIs to show real live data.
+    </footer>
+  </div>
+
+  <script>
+    // --- Utility / state ---
+    const state = {
+      cpu: 0, mem: 0, disk: 0, score: 0,
+      scanResults: [],
+      incidents: [],
+      alerts: []
+    };
+
+    // Random-ish generator for simulation
+    function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    // Update health cards periodically (simulate telemetry)
+    function updateHealth() {
+      state.cpu = Math.min(99, Math.max(2, Math.round((state.cpu * 0.7) + rand(1, 30) * 0.3)));
+      state.mem = Math.min(99, Math.max(5, Math.round((state.mem * 0.75) + rand(1, 40) * 0.25)));
+      state.disk = Math.min(95, Math.max(5, Math.round((state.disk * 0.8) + rand(0, 10) * 0.2)));
+      document.getElementById('cpu').textContent = state.cpu + '%';
+      document.getElementById('mem').textContent = state.mem + '%';
+      document.getElementById('disk').textContent = state.disk + '%';
+      computeScore();
+      updateScoreUI();
+    }
+
+    // Compute readiness score from weighted checks
+    function computeScore() {
+      // Baseline from health: lower usage = higher score
+      const healthScore = Math.round((100 - state.cpu) * 0.25 + (100 - state.mem) * 0.25 + (100 - state.disk) * 0.1);
+      // checklist contributions:
+      const checkboxes = [...document.querySelectorAll('#checklist input[type="checkbox"]')];
+      const checked = checkboxes.filter(c => c.checked).length;
+      const checklistScore = Math.round((checked / checkboxes.length) * 30);
+      // scan result contributions:
+      const scanPasses = state.scanResults.filter(s => s.level === 'pass').length;
+      const scanScore = Math.min(35, scanPasses * 7); // max 35
+      state.score = Math.max(0, Math.min(100, Math.round(healthScore * 0.4 + checklistScore * 0.4 + scanScore * 0.2)));
+    }
+
+    function updateScoreUI() {
+      const scoreEl = document.getElementById('score');
+      const textEl = document.getElementById('scoreText');
+      scoreEl.textContent = state.score + '/100';
+      if (state.score >= 80) {
+        textEl.textContent = '✅ Ready for Production';
+        textEl.className = 'text-sm text-emerald-700';
+        document.getElementById('gaugeArc').style.background = 'linear-gradient(180deg,#10b981 0%,#34d399 100%)';
+        document.getElementById('gaugeArc').style.transform = 'rotate(' + (-90 + (state.score / 100) * 180) + 'deg)';
+      } else if (state.score >= 50) {
+        textEl.textContent = '⚠️ Needs Attention';
+        textEl.className = 'text-sm text-amber-700';
+        document.getElementById('gaugeArc').style.background = 'linear-gradient(180deg,#f59e0b 0%,#f97316 100%)';
+        document.getElementById('gaugeArc').style.transform = 'rotate(' + (-90 + (state.score / 100) * 180) + 'deg)';
+      } else {
+        textEl.textContent = '❌ Not Ready';
+        textEl.className = 'text-sm text-red-600';
+        document.getElementById('gaugeArc').style.background = 'linear-gradient(180deg,#ef4444 0%,#f87171 100%)';
+        document.getElementById('gaugeArc').style.transform = 'rotate(' + (-90 + (state.score / 100) * 180) + 'deg)';
+      }
+    }
+
+    // Scan logic - runs several checks and stores results
+    function runScan() {
+      state.scanResults = [];
+      const checks = [
+        { key: 'ssl', label: 'SSL Certificate Valid' },
+        { key: 'waf', label: 'WAF Active' },
+        { key: 'fail2ban', label: 'Fail2Ban Active' },
+        { key: 'deps', label: 'Dependencies Up-to-date' },
+        { key: 'db', label: 'Database Connection OK' }
+      ];
+      checks.forEach(c => {
+        // randomized outcome but biased: more likely pass if health is good
+        const healthFactor = (100 - Math.max(state.cpu, state.mem));
+        const r = rand(0, 100) + (healthFactor * 0.2);
+        let level = r > 75 ? 'pass' : r > 50 ? 'warn' : 'fail';
+        // if checkbox is manually checked treat as pass
+        const box = document.querySelector('#checklist input[data-key="'+c.key+'"]');
+        if (box && box.checked) level = 'pass';
+        state.scanResults.push({ key: c.key, label: c.label, level, time: new Date().toISOString() });
+      });
+
+      renderScanResults();
+      computeScore();
+      updateScoreUI();
+      // push any 'fail' to alerts and incidents
+      const failures = state.scanResults.filter(s => s.level === 'fail');
+      if (failures.length) {
+        failures.forEach(f => {
+          addAlert(`Scan failure: ${f.label}`);
+          addIncident(`Scan reported failure: ${f.label}`);
+        });
+      } else {
+        addAlert('Scan completed: no critical failures');
+      }
+    }
+
+    function renderScanResults() {
+      const alertsEl = document.getElementById('alerts');
+      if (!state.scanResults.length) {
+        alertsEl.textContent = 'No scan results yet.';
+        return;
+      }
+      // build small list
+      const frag = document.createElement('div');
+      frag.className = 'space-y-2 text-sm';
+      state.scanResults.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'flex justify-between items-center gap-4';
+        const left = document.createElement('div');
+        left.textContent = s.label;
+        const status = document.createElement('div');
+        status.textContent = s.level.toUpperCase();
+        if (s.level === 'pass') status.className = 'text-emerald-600';
+        if (s.level === 'warn') status.className = 'text-amber-600';
+        if (s.level === 'fail') status.className = 'text-red-600';
+        row.appendChild(left); row.appendChild(status);
+        frag.appendChild(row);
+      });
+      alertsEl.innerHTML = '';
+      alertsEl.appendChild(frag);
+    }
+
+    // Alerts / incidents
+    function addAlert(msg) {
+      state.alerts.unshift({ msg, time: new Date().toISOString() });
+      // keep small
+      if (state.alerts.length > 6) state.alerts.pop();
+      const alertsEl = document.getElementById('alerts');
+      if (state.alerts.length) {
+        alertsEl.innerHTML = state.alerts.map(a => `<div class="text-xs"><span class="font-medium">${new Date(a.time).toLocaleTimeString()}</span> — ${a.msg}</div>`).join('');
+      }
+    }
+
+    function addIncident(text) {
+      const id = Date.now();
+      const inc = { id, text, time: new Date().toISOString() };
+      state.incidents.unshift(inc);
+      renderTimeline();
+    }
+    function renderTimeline() {
+      const list = document.getElementById('timeline');
+      list.innerHTML = '';
+      state.incidents.forEach(i => {
+        const li = document.createElement('li');
+        li.className = 'border-l-2 border-slate-200 pl-3 py-2';
+        li.innerHTML = `<div class="text-xs text-slate-500">${new Date(i.time).toLocaleString()}</div><div class="mt-1">${i.text}</div>`;
+        list.appendChild(li);
+      });
+      if (!state.incidents.length) {
+        list.innerHTML = '<li class="text-sm text-slate-500">No incidents recorded.</li>';
+      }
+    }
+
+    // Quick actions (simulate)
+    function simulateRestart(service) {
+      addAlert(`Restart requested: ${service}`);
+      addIncident(`${service} restarted (simulated)`);
+      // temporarily reduce CPU/memory to simulate recovery
+      state.cpu = Math.max(8, state.cpu - rand(5, 18));
+      state.mem = Math.max(6, state.mem - rand(4, 12));
+      updateHealth();
+    }
+    function simulateBlockIp() {
+      const ip = `192.0.2.${rand(10,200)}`;
+      addAlert(`Blocked IP ${ip}`);
+      addIncident(`IP ${ip} blocked by operator`);
+    }
+
+    // Export report (download JSON)
+    function exportReport() {
+      const payload = {
+        timestamp: new Date().toISOString(),
+        cpu: state.cpu, mem: state.mem, disk: state.disk,
+        score: state.score,
+        scanResults: state.scanResults,
+        incidents: state.incidents.slice(0,20),
+        checklist: [...document.querySelectorAll('#checklist input')].map(i => ({ key: i.dataset.key || null, checked: i.checked })) 
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `runtime-readiness-${(new Date()).toISOString().replace(/[:.]/g,'-')}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      addAlert('Exported report (JSON).');
+    }
+
+    // wire up DOM events
+    document.getElementById('runScan').addEventListener('click', runScan);
+    document.getElementById('clearScan').addEventListener('click', () => {
+      state.scanResults = []; renderScanResults(); addAlert('Scan cleared.'); computeScore(); updateScoreUI();
+    });
+    document.getElementById('addIncident').addEventListener('click', () => {
+      const t = document.getElementById('incidentText');
+      if (t.value.trim()) { addIncident(t.value.trim()); t.value = ''; addAlert('Incident added'); computeScore(); updateScoreUI();}
+    });
+    document.getElementById('restartHttp').addEventListener('click', () => simulateRestart('Apache'));
+    document.getElementById('restartDb').addEventListener('click', () => simulateRestart('Database'));
+    document.getElementById('blockIp').addEventListener('click', simulateBlockIp);
+    document.getElementById('exportBtn').addEventListener('click', exportReport);
+
+    // initialize
+    (function init() {
+      // seed health
+      state.cpu = rand(8, 40);
+      state.mem = rand(10, 60);
+      state.disk = rand(15, 60);
+      updateHealth();
+      renderScanResults();
+      renderTimeline();
+      // periodic updates
+      setInterval(updateHealth, 4000);
+    })();
+  </script>
+</body>
+</html>

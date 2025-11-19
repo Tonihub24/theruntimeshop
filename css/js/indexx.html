@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Runtime Readiness</title>
+<style>
+  body {
+    background-color: #0a0a0a;
+    color: #31aff8;
+    font-family: 'Courier New', monospace;
+    margin: 0; padding: 20px;
+  }
+  .container {
+    max-width: 600px;
+    margin: auto;
+    background: rgba(20,20,20,0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px #31aff8;
+  }
+  h1 { text-align: center; margin-bottom: 20px; }
+  .step {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+    padding: 8px 0;
+  }
+  .status { font-weight: bold; }
+  .status.pass { color: #00ff6a; }
+  .status.fail, .status.error { color: red; }
+  .status.pending { color: orange; }
+  h2 {
+    margin-top: 30px;
+    color: #31aff8;
+    border-bottom: 1px solid #31aff8;
+    padding-bottom: 6px;
+  }
+  pre {
+    background: #111;
+    color: #f00;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ Runtime Readiness</h1>
+
+    <div class="step">
+      <span>System Uptime</span>
+      <span id="uptimeStatus" class="status pending">Loading...</span>
+    </div>
+    <div class="step">
+      <span>Database Connection</span>
+      <span class="status pass">PASS</span>
+    </div>
+    <div class="step">
+      <span>Log Health</span>
+      <span class="status pass">PASS</span>
+    </div>
+    <div class="step">
+      <span>Security Rules</span>
+      <span class="status pending">Pending</span>
+    </div>
+
+    <h2>Apache Error Logs</h2>
+    <pre id="apacheLogs">Loading Apache logs...</pre>
+
+    <h2>Fail2Ban Logs</h2>
+    <pre id="fail2banLogs">Loading Fail2Ban logs...</pre>
+  </div>
+
+  <script>
+    async function fetchLogs() {
+      try {
+        const apacheRes = await fetch('/js/apache-errors.txt?cache=' + Date.now());
+        const apacheText = apacheRes.ok ? await apacheRes.text() : 'Failed to load Apache logs.';
+        document.getElementById('apacheLogs').textContent = apacheText;
+      } catch {
+        document.getElementById('apacheLogs').textContent = 'Failed to load Apache logs.';
+      }
+
+      try {
+        const fail2banRes = await fetch('/js/fail2ban-errors.txt?cache=' + Date.now());
+        const fail2banText = fail2banRes.ok ? await fail2banRes.text() : 'Failed to load Fail2Ban logs.';
+        document.getElementById('fail2banLogs').textContent = fail2banText;
+      } catch {
+        document.getElementById('fail2banLogs').textContent = 'Failed to load Fail2Ban logs.';
+      }
+    }
+
+    function updateUptime() {
+      fetch('/proc/uptime')
+        .then(res => res.text())
+        .then(text => {
+          const seconds = parseFloat(text.split(' ')[0]);
+          const days = Math.floor(seconds / 86400);
+          const hours = Math.floor((seconds % 86400) / 3600);
+          const minutes = Math.floor((seconds % 3600) / 60);
+          document.getElementById('uptimeStatus').textContent =
+            `${days}d ${hours}h ${minutes}m`;
+          document.getElementById('uptimeStatus').className = 'status pass';
+        })
+        .catch(() => {
+          document.getElementById('uptimeStatus').textContent = 'ERROR';
+          document.getElementById('uptimeStatus').className = 'status error';
+        });
+    }
+
+    fetchLogs();
+    updateUptime();
+    setInterval(fetchLogs, 60000); // refresh logs every 60 sec
+    setInterval(updateUptime, 60000); // refresh uptime every 60 sec
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Server Attack Responses</title>
+  <link rel="stylesheet" href="css/defencecoding.css">
+</head>
+<body>
+<a href="dashboard.php" class="home-button">🏠 Back to Dashboard</a>
+
+
+
+<details style="margin-top: 2rem; padding: 1rem; border: 1px solid #0ff; border-radius: 1rem; background: var(--surface-3); color: #0ff; font-family: system-ui, sans-serif;">  
+  <summary style="font-size: 1.3rem; cursor: pointer; font-weight: bold;">
+    🛡️ In-Production Server Response & Defense (Click to Expand)
+  </summary>
+
+  <section>
+    <div class="bento-grid">
+
+      <div class="item">
+        <h2>1. Fail2Ban Monitoring</h2>
+        <p>Fail2Ban scans logs for malicious access patterns and bans offending IPs automatically using <code>iptables</code> or <code>firewalld</code>.</p>
+        <p>Configure jails for <code>apache-auth</code>, <code>sshd</code>, and <code>php-url</code> as needed.</p>
+      </div>
+
+      <div class="item">
+        <h2>2. Apache Log Monitoring</h2>
+        <p>Review <code>/var/log/apache2/access.log</code> and <code>error.log</code> regularly for suspicious activity.</p>
+        <p>Tools like <code>goaccess</code>, <code>logwatch</code>, or custom <code>grep</code> scripts help highlight anomalies.</p>
+      </div>
+
+      <div class="item" style="--row: span 2">
+        <h2>3. Rate Limiting with ModSecurity</h2>
+        <p>Use ModSecurity to enforce rate limits and detect common OWASP Top 10 attack patterns.</p>
+        <p>Combine with a WAF for comprehensive filtering.</p>
+      </div>
+
+      <div class="item">
+        <h2>4. IP Reputation Filtering</h2>
+        <p>Block traffic from known malicious IPs using sources like AbuseIPDB or DNSBLs.</p>
+        <p>Automate updates via CRON jobs and <code>iptables</code> rules.</p>
+      </div>
+
+      <div class="item">
+        <h2>5. Real-Time Alerts</h2>
+        <p>Send email or webhook alerts using <code>Fail2Ban</code>, <code>Logwatch</code>, or <code>OSSEC</code>.</p>
+        <p>Ensure fast reaction to intrusion attempts and failed logins.</p>
+      </div>
+
+      <div class="item">
+        <h2>6. Snapshot & Backup Readiness</h2>
+        <p>Perform daily VM snapshots and store encrypted incremental backups using tools like <code>restic</code>, <code>rsync</code>, or DigitalOcean Snapshots.</p>
+        <p>Always have a rollback strategy in case of breach or defacement.</p>
+      </div>
+
+    </div>
+  </section>
+</details>
+
+<script src="js/defencecoding.js"></script>
+
+</body>
+</html>

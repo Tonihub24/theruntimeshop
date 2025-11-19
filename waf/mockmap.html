@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Runtime Threat Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+  <style>
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+
+    .pulse-marker {
+      background: rgba(255, 0, 0, 0.6);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Init map
+    const map = L.map('map').setView([20, 0], 2); // center of world
+
+    // Add tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Runtime Readiness Threat Map',
+    }).addTo(map);
+
+    // Mock threat data
+    const threatData = [
+      { location: [55.7558, 37.6173], label: 'Moscow - IP: 185.23.91.42' },
+      { location: [40.7128, -74.006], label: 'NYC - IP: 208.67.222.123' },
+      { location: [35.6895, 139.6917], label: 'Tokyo - IP: 102.67.90.11' }
+    ];
+
+    // Plot threat points
+    threatData.forEach((threat) => {
+      const divIcon = L.divIcon({
+        className: 'pulse-marker'
+      });
+      const marker = L.marker(threat.location, { icon: divIcon }).addTo(map);
+      marker.bindPopup(`<strong>🚨 Threat:</strong><br>${threat.label}`).openPopup();
+
+      // Optional: Remove after delay to simulate live update
+      setTimeout(() => {
+        map.removeLayer(marker);
+      }, 5000);
+    });
+  </script>
+</body>
+</html>

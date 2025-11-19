@@ -1,0 +1,122 @@
+/* Modern Bubble Form Styles */
+body {
+
+  padding: 0;
+
+ 
+  flex-direction: column; /* <-- stack items vertically */
+  justify-content: center; /* vertically center page content */
+  align-items: center;     /* horizontally center items */
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  font-family: 'Poppins', sans-serif;
+  gap: 20px; /* optional spacing between logo and form */
+}
+
+/* Style your logo */
+.site-logo {
+  display: block;
+  width: 150px;       /* adjust as needed */
+  height: auto;
+  margin: 30px auto 20px auto;
+  filter: drop-shadow(0 0 10px #31aff8);
+}
+
+/* Optional: Center forms below logo */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-container {
+  position: relative;
+  width: 350px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 25px;
+  box-shadow: 0 0 20px #31aff8;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.bubble-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bubble-form h2 {
+  color: #31aff8;
+  margin-bottom: 10px;
+}
+
+.bubble-form input {
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.bubble-form input:focus {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px #31aff8;
+}
+
+.bubble-form button {
+  background: linear-gradient(90deg, #31aff8, #bc13fe);
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bubble-form button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #bc13fe;
+}
+
+.bubble-form p {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.bubble-form a {
+  color: #31aff8;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+.active {
+  display: block;
+}
+/* --- Main Buttons --- */
+.toggle-btn {
+  background: transparent;
+  color: #31aff8;
+  border: 2px solid #31aff8;
+  border-radius: 30px;
+  padding: 10px 30px;
+  margin: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .form-container {
+    width: 90%;
+    padding: 25px;
+  }
+}

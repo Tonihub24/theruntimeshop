@@ -1,0 +1,14 @@
+{
+  "name": "runtimeshop-fake-appointments",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "twilio": "^4.23.0"
+  }
+}
