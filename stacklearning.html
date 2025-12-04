@@ -33,6 +33,34 @@
       margin: auto;
       padding: 30px 20px;
     }
+    @keyframes glow {
+  0% {
+    box-shadow: 0 0 5px var(--accent);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--accent2);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--accent);
+  }
+}
+
+.next-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #020617;
+  cursor: pointer;
+  animation: glow 2s infinite; /* adds slow glowing effect */
+  transition: transform 0.2s;
+}
+
+.next-btn:hover {
+  transform: scale(1.0); /* optional: subtle grow on hover */
+}
+
 
     header {
       display: flex;
@@ -74,29 +102,37 @@
       line-height: 1.6;
     }
 
-    .next-btn {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      color: #020617;
-      cursor: pointer;
-    }
+  
+/* Progress Bar Container */
+.progress-bar {
+  height: 10px;
+  background: #020617; /* dark background */
+  border-radius: 50px;
+  overflow: visible; /* allow glow to show outside */
+}
 
-    .progress-bar {
-      height: 10px;
-      background: #020617;
-      border-radius: 50px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
+/* Progress Fill with Glow */
+.progress-bar span {
+  display: block;
+  height: 100%;
+  width: 42%; /* adjust to match your progress */
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 50px;
+  animation: progressGlow 2s infinite;
+  box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+}
 
-    .progress-bar span {
-      display: block;
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-    }
+/* Glow Animation */
+@keyframes progressGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent2);
+  }
+  50% {
+    box-shadow: 0 0 15px var(--accent), 0 0 30px var(--accent2);
+  }
+}
+
+
 
     .roadmap {
       display: grid;
@@ -148,10 +184,24 @@
   <div class="container">
 
     <!-- HEADER -->
-    <header>
-      <div class="brand">The Runtime Shop — Student Portal</div>
-      <div class="student">Logged in as: <strong>Student Name</strong></div>
-    </header>
+    <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background-color: var(--bg);">
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="logos/runnlogos666.png" alt="RuntimeShop Logo" class="site-logo">
+  </div>
+
+  <!-- Brand / Portal Name -->
+  <div class="brand" style="font-weight: bold; font-size: 18px;">
+    The Runtime Shop — Student Portal
+  </div>
+
+  <!-- Student Info -->
+  <div class="student">
+    Logged in as: <strong>Student Name</strong>
+  </div>
+</header>
+
 
     <!-- WHAT'S NEXT CARD -->
     <section class="next-card">
@@ -190,9 +240,12 @@
   </p>
 </section>
 
-    <footer>
-      Runtime Shop • Backend • APIs • Security • Deployment
-    </footer>
+    <footer style="background-color: var(--bg); color: var(--text); padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center;">
+  <img src="logos/runnlogos666.png" alt="RuntimeShop Logo" class="site-logo" style="height: 60px; margin-bottom: 10px;">
+  CRUD State of Mind
+</footer>
+
+
 
   </div>
 
@@ -236,4 +289,4 @@
 </body>
 </html>
 
-Get Outlook for iOS
+
