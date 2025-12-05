@@ -28,7 +28,7 @@ body {
 .site-logo {
   display:table-column;
   
-  height: 4000px;        /* keeps proportions */
+  height: auto;        /* keeps proportions */
   max-height: 152px;   /* ensures it never grows too tall */
   object-fit: contain;
 }
