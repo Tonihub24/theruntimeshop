@@ -13,6 +13,7 @@ if (isset($_SESSION['username'])) {
 <html lang="en">
 <head>
 <style>
+  
 /* Inquiry Modal Overlay */
 #inquiryModal {
   display: none; /* Hidden by default */
@@ -21,7 +22,7 @@ if (isset($_SESSION['username'])) {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7); /* dark overlay */
+  background: rgba(247, 245, 245, 0.7); /* dark overlay */
   justify-content: center;
   align-items: center; /* vertically center the modal */
   z-index: 9999;
@@ -29,12 +30,12 @@ if (isset($_SESSION['username'])) {
 
 /* The white card/modal */
 .modal-card {
-  background: #0d1117;
+  background: #eeeeec;
   border: 2px solid #00ffff;
   border-radius: 10px;
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
   padding: 20px;
-  width: 80%;
+  width: 100%;
   max-width: 800px;
   max-height: 85vh;
   overflow: hidden;
@@ -43,6 +44,11 @@ if (isset($_SESSION['username'])) {
   position: relative;
   animation: fadeIn 0.4s ease;
 }
+#inspect-lessons {
+  margin-top: -90px;   /* move UP */
+  padding-top: 0;
+}
+
 
 /* iframe should fill the modal */
 #inquiryFrame {
@@ -88,6 +94,7 @@ if (isset($_SESSION['username'])) {
   box-sizing: border-box;
 }
 
+
 /* Style for each tier button */
 .tier-levels button {
   background: linear-gradient(135deg, #00ffff, #0088ff);
@@ -113,6 +120,25 @@ if (isset($_SESSION['username'])) {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
+html, body {
+  background: #e3f2fa !important;
+  color: #f8f4f4;
+  min-height: 300vh;
+
+}
+
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #ffffff;   /* WHITE background */
+  z-index: -1;           /* behind everything */
+}
+
+
+
 </style>
 
   <meta charset="UTF-8">
@@ -163,6 +189,8 @@ if (isset($_SESSION['username'])) {
 <!-- 🫧 Two Bubbles --> <div class="bubble-buttons"> <div class="bubble" onclick="toggleForm('login-form')">Login</div> <div class="bubble" onclick="toggleForm('signup-form')">Signup</div>
 </div>
 
+
+
  
 
 
@@ -200,7 +228,7 @@ if (isset($_SESSION['username'])) {
           </select>
 
           <!-- Experience Level -->
-          <label for="profileType">Experience Level</label>
+          <label for="profileType">Experience Level</label>ana
           <select id="profileType" name="profileType" required>
             <option value="">-- Select your level --</option>
             <option value="frontend"> New (Sprout Stacker)</option>
@@ -223,17 +251,29 @@ if (isset($_SESSION['username'])) {
     </div>
 
 <section id="inspect-lessons" style="color: #31aff8;">
-  <h2>“Master Web Development Like a Pro – Start Editing, Debugging, and Protecting in Real-Time!”</h2>
-  <p>“Master Web Development: HTML, CSS, PHP,Console Debugging, Performance Insights & Network Monitoring – All in Real-Time!”</p>
-  
+  <h2>
+    Master scalable CRUD-based web systems aligned with enterprise standards
+  </h2>
+
+  <p>
+    Learn how to manage and protect modern web applications using CRUD workflows
+    and real-time security monitoring.
+  </p>
+
+  <p>
+    Detect and block malicious activity before deployment and in production — all in real time.
+  </p>
+
   <ul>
-     <li>     </li>
-  <li>Discover how runtime security tools detect and block attacks in both pre-deployment and live runtime environments.</li>
-  <li>Use browser developer tools to debug safely, check performance, and spot vulnerabilities</li>
-  <li>         </li>
-  <li> Code Editing → Server Execution → Security Monitoring → Protection Deployment</li>
+    <li>Implement server-side execution flows with controlled data handling</li>
+    <li>Use browser developer tools to safely debug, analyze performance, and identify vulnerabilities</li>
+    <li>Track performance, network traffic, and suspicious behavior in real time</li>
+    <li>Follow the lifecycle: Code Editing → Server Execution → Security Monitoring → Protection Deployment</li>
   </ul>
+</section>
+
 <section class="hero">
+
   <h1>           </h1>
   <p>Interested?</p>
 </p>
@@ -249,7 +289,7 @@ if (isset($_SESSION['username'])) {
   <h1 style="color:#00ffff;"></h1>
   <p style="color:#8b949e;">Have a vision? We’ll help you build it — from concept to deployment.</p>
   <a href="#" id="inquiryBtn" class="btn" 
-     style="background:#00ffff; color:#0d1117; padding:3px 12px; border-radius:5px; font-weight:bold; text-decoration:none;">
+     style="background:#00ffff; color:#1764d8; padding:3px 12px; border-radius:5px; font-weight:bold; text-decoration:none;">
      Design Inquire
   </a>
 </section>
@@ -330,22 +370,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // ---------- Particles.js ----------
   if (window.particlesJS) {
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: "#31aff8" },
-        shape: { type: "circle" },
-        opacity: { value: 0.5, random: true },
-        size: { value: 3, random: true },
-        line_linked: { enable: true, distance: 150, color: "#00ffff", opacity: 0.3, width: 1 },
-        move: { enable: true, speed: 2, direction: "none", random: false, out_mode: "bounce" }
-      },
-      interactivity: {
-        events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" } },
-        modes: { grab: { distance: 140, line_linked: { opacity: 0.6 } }, push: { particles_nb: 4 } }
-      },
-      retina_detect: true
-    });
+   particlesJS("particles-js", {
+  particles: {
+    number: { value: 80, density: { enable: true, value_area: 800 } },
+    color: { value: "#1f2937" }, /* dark gray */
+    shape: { type: "circle" },
+    opacity: { value: 0.4, random: true },
+    size: { value: 3, random: true },
+    line_linked: {
+      enable: true,
+      distance: 150,
+      color: "#60a5fa", /* soft blue */
+      opacity: 0.3,
+      width: 4
+    },
+    move: { enable: true, speed: 2 }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "grab" },
+      onclick: { enable: true, mode: "push" }
+    },
+    modes: {
+      grab: { distance: 140, line_linked: { opacity: 0.4 } },
+      push: { particles_nb: 4 }
+    }
+  },
+  retina_detect: true
+});
+
   }
 });
 </script>
@@ -356,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function() {
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   justify-content: center;
   align-items: center;
   z-index: 9999;
@@ -393,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function() {
       src="/stacklearning.html" 
       title="Stack Learning Path"
       frameborder="0"
-      style="width:100%; height:70vh; border:none; border-radius:8px;">
+      style="width:100%; height:90vh; border:none; border-radius:8px;">
     </iframe>
   </div>
 </div>
