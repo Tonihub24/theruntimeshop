@@ -1,2 +1,4 @@
 .env
  .env
+js/apache-errors.txt
+js/fail2ban-errors.txt
