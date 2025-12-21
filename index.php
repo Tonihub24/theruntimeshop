@@ -317,9 +317,9 @@ document.addEventListener("DOMContentLoaded", function() {
     inquiryBtn.addEventListener("click", e => {
       e.preventDefault();
       inquiryModal.style.display = "flex";
-      document.body.style.overflow = "hidden";
+      document.body.styl.overflow = "hidden";
     });
-    inquiryClose.addEventListener("click", () => {
+    inquiryClose.addEvenListener("click", () => {
       inquiryModal.style.display = "none";
       document.body.style.overflow = "auto";
     });
