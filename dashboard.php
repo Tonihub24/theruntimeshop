@@ -1,123 +1,205 @@
 <?php
 session_start();
 
-// Redirect to login if not logged in
+// 🔐 Require login
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-// DB connection
-$host = '127.0.0.1';
-$dbname = 'runtimeshop_db';
-$username = 'runtimeshop_admin';
-$password = 'YourStrongPassword123!';
+$username = htmlspecialchars($_SESSION['username']);
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]);
-} catch (PDOException $e) {
-    die("Database connection failed: " . htmlspecialchars($e->getMessage()));
-}
-
-// Determine user tier
-$profileType = $_SESSION['profileType'] ?? 'sprout';
-
-// Fetch Learning Path modules for the user's tier
-$stmt = $pdo->prepare("SELECT * FROM learning_modules WHERE tier = :tier AND is_active = 1 ORDER BY id ASC");
-$stmt->execute(['tier' => $profileType]);
-$modules = $stmt->fetchAll();
-
-// Profile badge info
-$profileData = [
-    'sprout' => ['name' => '🌱 Sprout Stacker', 'desc' => 'Start your programming journey with basics of backend, frontend, and security.', 'class' => 'badge-sprout'],
-    'stacklearner' => ['name' => '📚 Stack Learner', 'desc' => 'Intermediate developer: bridging backend, frontend, and security.', 'class' => 'badge-stacklearner'],
-    'fullstacker' => ['name' => '🧱 Full Stacker', 'desc' => 'Build secure, full-stack apps confidently.', 'class' => 'badge-fullstacker']
+// 🔁 TEMP: Module states (later you can move this to DB)
+$modules = [
+    [
+        'title' => 'Server Foundations',
+        'desc'  => 'How servers, ports, and requests work',
+        'status'=> 'COMPLETE'
+    ],
+    [
+        'title' => 'API Routing & HTTP',
+        'desc'  => 'GET, POST, PUT, DELETE',
+        'status'=> 'COMPLETE'
+    ],
+    [
+        'title' => 'Database Systems',
+        'desc'  => 'SQL & NoSQL CRUD',
+        'status'=> 'ACTIVE',
+        'progress' => 42,
+        'url' => '/lessons/database-systems.html'
+    ],
+    [
+        'title' => 'Full CRUD APIs',
+        'desc'  => 'Connecting server to database',
+        'status'=> 'LOCKED'
+    ],
+    [
+        'title' => 'Authentication',
+        'desc'  => 'JWT, hashing, route protection',
+        'status'=> 'LOCKED'
+    ],
+    [
+        'title' => 'Deployment & Version Control',
+        'desc'  => 'Linux, domains, HTTPS, Git & GitHub',
+        'status'=> 'LOCKED'
+    ],
+    [
+        'title' => 'Cyber Defense',
+        'desc'  => 'Firewalls, Fail2Ban, backups',
+        'status'=> 'LOCKED'
+    ]
 ];
-$current = $profileData[$profileType];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>RuntimeShop Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - RuntimeShop</title>
-<link rel="stylesheet" href="css/styles.css">
-<link rel="icon" type="image/png" href="/logos/runnlogos666.png">
+<link rel="icon" href="/logos/runnlogos666.png">
 
 <style>
-/* Dashboard styling */
-body { background:#0d1117; color:#00ffff; font-family: Arial, sans-serif; }
-.dashboard-wrapper { max-width:1200px; margin:0 auto; padding:20px; }
-header { text-align:center; margin-bottom:30px; }
-.profile-badge { background:#111; border:2px solid #00ffff; padding:15px; border-radius:10px; text-align:center; margin-bottom:20px; }
-.profile-badge h2 { margin:0; }
-.learning-card { background:#111; color:#00ffff; padding:20px; margin:15px 0; border-radius:10px; box-shadow:0 0 15px #00ffff; }
-.learning-card h3 { margin-top:0; }
-.start-btn { display:inline-block; margin-top:10px; padding:10px 15px; background:#00ffff; color:#0d1117; text-decoration:none; border-radius:6px; font-weight:bold; }
-.start-btn:hover { background:#0088ff; }
-.logout-btn { background:#ff0040; color:white; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; float:right; }
+body {
+  margin:0;
+  background:#0d1117;
+  color:#e6edf3;
+  font-family:Arial, sans-serif;
+}
+
+.dashboard {
+  max-width:1100px;
+  margin:0 auto;
+  padding:30px 20px;
+}
+
+header {
+  text-align:center;
+  margin-bottom:40px;
+}
+
+header img {
+  max-width:140px;
+}
+
+.now-learning {
+  color:#00ffff;
+  margin-top:10px;
+}
+
+.logout {
+  float:right;
+  background:#ff0040;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.module {
+  background:#111;
+  border:2px solid #333;
+  padding:20px;
+  margin-bottom:18px;
+  border-radius:12px;
+}
+
+.module.complete {
+  border-color:#00ff99;
+  box-shadow:0 0 10px #00ff99;
+}
+
+.module.active {
+  border-color:#00ffff;
+  box-shadow:0 0 15px #00ffff;
+}
+
+.module.locked {
+  opacity:0.45;
+}
+
+.status {
+  float:right;
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.status.COMPLETE { background:#00ff99; color:#000; }
+.status.ACTIVE { background:#00ffff; color:#000; }
+.status.LOCKED { background:#444; color:#aaa; }
+
+.start {
+  display:inline-block;
+  margin-top:10px;
+  background:#00ffff;
+  color:#000;
+  padding:10px 16px;
+  border-radius:6px;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.manifesto {
+  margin-top:60px;
+  padding:30px;
+  border-top:2px solid #00ffff;
+  color:#8b949e;
+  text-align:center;
+}
 </style>
 </head>
 
 <body>
-<div class="dashboard-wrapper">
+
+<div class="dashboard">
 
 <header>
-    <img src="/logos/runnlogos666.png" alt="RuntimeShop Logo" style="max-width:150px;">
-    <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
-    <form method="post" action="logout.php" style="display:inline;">
-        <button class="logout-btn">Logout</button>
-    </form>
+  <form method="post" action="logout.php">
+    <button class="logout">Logout</button>
+  </form>
+
+  <img src="/logos/runnlogos666.png" alt="RuntimeShop Logo">
+  <h1>Logged in as: <?= $username ?></h1>
+  <p class="now-learning">Now Learning: <strong>Database Systems</strong></p>
 </header>
 
-<div class="profile-badge <?php echo $current['class']; ?>">
-    <h2><?php echo $current['name']; ?></h2>
-    <p><?php echo $current['desc']; ?></p>
-</div>
+<h2>Your Learning Path</h2>
 
-<section id="learning-path">
-    <h2 style="text-align:center; margin-bottom:20px;">Your Learning Path</h2>
+<?php foreach ($modules as $m): ?>
+  <div class="module <?= strtolower($m['status']); ?>">
+    <span class="status <?= $m['status']; ?>">
+      <?= $m['status']; ?>
+    </span>
 
-    <?php if(empty($modules)): ?>
-        <p style="text-align:center; color:#ff0040;">No learning modules available for your tier yet. Check back soon!</p>
+    <h3><?= $m['title']; ?></h3>
+    <p><?= $m['desc']; ?></p>
+
+    <?php if ($m['status'] === 'ACTIVE'): ?>
+      <p><strong>Course Progress:</strong> <?= $m['progress']; ?>%</p>
+      <a class="start" href="<?= $m['url']; ?>">Start Next Lesson</a>
+
+    <?php elseif ($m['status'] === 'COMPLETE'): ?>
+      <p style="color:#00ff99;">✔ Completed</p>
+
     <?php else: ?>
-        <?php foreach($modules as $module): ?>
-            <div class="learning-card">
-                <h3><?php echo htmlspecialchars($module['title']); ?></h3>
-                <p><?php echo htmlspecialchars($module['description']); ?></p>
-                <a href="<?php echo htmlspecialchars($module['content_url']); ?>" class="start-btn" target="_blank">Start Module</a>
-            </div>
-        <?php endforeach; ?>
+      <p>🔒 Locked</p>
     <?php endif; ?>
-</section>
+  </div>
+<?php endforeach; ?>
 
+<div class="manifesto">
+  <h3>⚡ System-Level Education</h3>
+  <p>Coding bootcamps don’t teach this.</p>
+  <p>Wix & GoDaddy users never learn this.</p>
+  <p>Security engineers get paid for this.</p>
+  <p><strong>You are not learning pages — you are learning control.</strong></p>
+  <p style="color:#00ffff; margin-top:10px;">CRUD State of Mind</p>
 </div>
 
-<!-- Optional particles.js background -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script>
-if(window.particlesJS){
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 50 },
-    color: { value: "#00ffff" },
-    shape: { type: "circle" },
-    opacity: { value: 0.3 },
-    size: { value: 3 },
-    line_linked: { enable: true, distance: 150, color: "#00ffff", opacity: 0.2, width: 1 },
-    move: { enable: true, speed: 2 }
-  },
-  interactivity: { events: { onhover: { enable: true, mode: "grab" } } },
-  retina_detect: true
-});
-}
-</script>
-
-<div id="particles-js" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;"></div>
+</div>
 
 </body>
 </html>
